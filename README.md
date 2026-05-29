@@ -171,7 +171,7 @@ npx hardhat run scripts/deploy.js --network amoy
 
 # 16) Deploy to Polygon Mainnet:
 
-(Only deploy to mainnet after testing.)
+Note: only deploy to mainnet after testing.
 
 npx hardhat run scripts/deploy.js --network polygon
 
