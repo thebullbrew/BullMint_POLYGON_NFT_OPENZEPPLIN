@@ -6,6 +6,20 @@ NFT Template for Poly using OpenZepplin Contract 5.x - REC-721
 This repository contains a Polygon-ready ERC-721 NFT smart contract for the Bull Brew NFT collection.
 The contract uses OpenZeppelin’s ERC-721 standard and is designed for deployment on Polygon Mainnet or Polygon Amoy Testnet.
 
+
+<img width="1280" height="640" alt="1" src="https://github.com/user-attachments/assets/41d899a1-1588-4914-856f-19f2c2bd137f" />
+
+
+
+<img width="1280" height="640" alt="2" src="https://github.com/user-attachments/assets/4aa07ac0-cc79-44e8-a4c0-a66b15587f38" />
+
+
+
+
+
+
+
+
 ---
 
 ## Contract
