@@ -1,4 +1,5 @@
-# BullMint_POLYGON_NFT_OPENZEPPLIN
+
+
 NFT Template for Poly using OpenZepplin Contract 5.x - REC-721
 
 # @thebullbrew Polygon ERC-721 Smart Contract
