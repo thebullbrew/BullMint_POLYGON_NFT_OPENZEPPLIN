@@ -53,6 +53,77 @@ Requirements
 * OpenZeppelin Contracts
 
 
+
+
+# Deploy NFT Collections to Polygon in Minutes
+
+Production-ready ERC721 NFT contract built with OpenZeppelin and Hardhat.
+
+## Features
+
+- Public minting
+- Owner minting
+- Adjustable mint price
+- Custom metadata URI support
+- Max supply enforcement
+- Withdrawal of mint proceeds
+- OpenZeppelin security standards
+- Polygon Amoy support
+- Polygon Mainnet support
+
+## Install
+
+```bash
+npm install
+```
+
+## Compile
+
+```bash
+npx hardhat compile
+```
+
+## Deploy to Polygon Amoy
+
+```bash
+npx hardhat run scripts/deploy.js --network amoy
+```
+
+## Deploy to Polygon Mainnet
+
+```bash
+npx hardhat run scripts/deploy.js --network polygon
+```
+
+## Contract Settings
+
+Collection Name:
+TheBullBrewCollection
+
+Symbol:
+BRW
+
+Maximum Supply:
+1000 NFTs
+
+Mint Price:
+0.01 POL
+
+## Security
+
+Never commit your .env file.
+
+Never share your private key.
+
+Always test on Polygon Amoy before deploying to mainnet.
+
+
+
+
+
+
+
+
 # Setup Instructions:
 
 # 1) Clone the repository:
