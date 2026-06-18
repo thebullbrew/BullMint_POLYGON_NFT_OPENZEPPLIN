@@ -11,8 +11,6 @@ The contract uses OpenZeppelin’s ERC-721 standard and is designed for deployme
 
 
 
-<img width="1280" height="640" alt="2" src="https://github.com/user-attachments/assets/4aa07ac0-cc79-44e8-a4c0-a66b15587f38" />
-
 
 
 
