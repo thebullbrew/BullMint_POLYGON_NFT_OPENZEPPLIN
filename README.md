@@ -96,7 +96,7 @@ npx hardhat run scripts/deploy.js --network amoy
 npx hardhat run scripts/deploy.js --network polygon
 ```
 
-## Contract Settings (At this point Yyou will see your own contract settings (Hopefully that's what you did.)
+## Contract Settings (At this point you will see your own contract settings - hopefully that's what you did.)
 
 Collection Name:
 TheBullBrewCollection
