@@ -55,7 +55,7 @@ Requirements
 
 
 
-# Deploy NFT Collections to Polygon in Minutes
+# Deploy NFT Collections to Polygon
 
 Production-ready ERC721 NFT contract built with OpenZeppelin and Hardhat.
 
