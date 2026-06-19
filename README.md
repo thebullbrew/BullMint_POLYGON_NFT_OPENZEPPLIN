@@ -118,11 +118,11 @@ Always test on Polygon Amoy before deploying to mainnet.
 
 ## LEGAL DISCLAIMER:
 
-This content is provided solely for educational and technical purposes - to discuss software development, blockchain infrastructure, and related programming concepts.
 Digital assets, smart contracts, wallets, private keys, and blockchain transactions involve material risk. 
 Transactions may be irreversible, code may contain vulnerabilities, and improper implementation or execution may result in the permanent loss of funds or digital assets.
 You are solely responsible for conducting your own due diligence, reviewing and testing any code, securing your credentials, understanding the applicable risks, and verifying all transactions before execution. Any use, deployment, modification, or reliance on this content is undertaken at your own risk.
 I make no representations or warranties regarding the accuracy, completeness, security, functionality, or suitability of any code, information, or material provided. I disclaim all liability for any losses, damages, failed transactions, software defects, security breaches, wallet compromises, or other consequences arising from the use of this content.
+This content is provided solely for educational and technical purposes - to discuss software development, blockchain infrastructure, and related programming concepts.
 
 Nothing herein constitutes financial, investment, legal, tax, accounting, securities, or cybersecurity advice, nor does it constitute an offer, solicitation, recommendation, or endorsement to buy, sell, hold, or transact in any digital asset, security, or financial instrument.
 
