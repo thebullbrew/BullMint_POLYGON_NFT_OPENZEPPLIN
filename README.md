@@ -71,6 +71,7 @@ Production-ready ERC721 NFT contract built with OpenZeppelin and Hardhat.
 - Polygon Amoy support
 - Polygon Mainnet support
 
+# The Basics - Quick & Dirty:
 ## Install
 
 ```bash
