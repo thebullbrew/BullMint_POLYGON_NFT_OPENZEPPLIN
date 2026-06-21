@@ -117,20 +117,48 @@ ROYALTY_RECEIVER=YOUR_ROYALTY_WALLET_ADDRESS
 ## Compile
 
 ```bash
-npx hardhat compile
+npm run compile
 ```
 
 ## Deploy to Polygon Amoy
 
 ```bash
-npx hardhat run scripts/deploy.js --network amoy
+npm run deploy:amoy
 ```
 
 ## Deploy to Polygon Mainnet
 
 ```bash
-npx hardhat run scripts/deploy.js --network polygon
+npm run deploy:polygon
 ```
+
+
+## Metadata fornmat
+
+
+```bash
+The contract uses a base URI pattern:
+ipfs://YOUR_METADATA_CID/1.json
+ipfs://YOUR_METADATA_CID/2.json
+ipfs://YOUR_METADATA_CID/3.json
+
+
+
+That means if your base URI is: 
+ipfs://bafybeixxxxxxxxxxxxxxxxxxxxxxxxxxxxx/
+
+then token metadata resolves as:
+ipfs://bafybeixxxxxxxxxxxxxxxxxxxxxxxxxxxxx/1.json
+ipfs://bafybeixxxxxxxxxxxxxxxxxxxxxxxxxxxxx/2.json
+ipfs://bafybeixxxxxxxxxxxxxxxxxxxxxxxxxxxxx/3.json
+```
+
+
+# Notes
+- Update the BASE_URI in scripts/deploy.js before deploying.
+- Update royalty receiver if you want royalties sent to a different wallet.
+- Public mint is disabled by default after deployment. Enable it by calling togglePublicMint(true) from the owner wallet.
+
 
 ## Contract Settings (At this point you will see your own contract settings - hopefully that's what you did.)
 
