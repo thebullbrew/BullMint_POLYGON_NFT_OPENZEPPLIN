@@ -61,15 +61,15 @@ Production-ready ERC721 NFT contract built with OpenZeppelin and Hardhat.
 
 ## Features
 
-- Public minting
-- Owner minting
-- Adjustable mint price
-- Custom metadata URI support
-- Max supply enforcement
-- Withdrawal of mint proceeds
-- OpenZeppelin security standards
-- Polygon Amoy support
-- Polygon Mainnet support
+- ERC-721 NFT contract
+- ERC-2981 royalty support
+- Public mint with owner-controlled toggle
+- Reserved supply for team / treasury / founder allocation
+- Per-wallet mint limit
+- Base URI metadata system
+- Owner mint function
+- Withdraw contract funds
+- Polygon Amoy + Polygon Mainnet deployment support
 
 
 # BREAKDOWN:
