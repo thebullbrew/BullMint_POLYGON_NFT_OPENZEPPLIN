@@ -29,8 +29,7 @@ Main contract file:
 contracts/BullBrewNFT.sol
 ```
 # Description: 
-This project contains a Polygon-ready ERC-721 NFT smart contract for the "Bull Brew NFT collection" (feel free to use your own because this is template).
-The contract uses OpenZeppelin’s ERC-721 standard and is designed for deployment on Polygon Mainnet or Polygon Amoy Testnet.
+Production-ready ERC-721 NFT collection for Polygon using Hardhat + OpenZeppelin.
 
 # What This Contract Does:
 
