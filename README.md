@@ -73,7 +73,8 @@ Production-ready ERC721 NFT contract built with OpenZeppelin and Hardhat.
 - Polygon Mainnet support
 
 
-## BREAKDOWBN:
+# BREAKDOWN:
+
 Collection name: TheBullBrewCollection
 Symbol: BRW
 Network: Polygon (Amoy testnet + Polygon mainnet)
