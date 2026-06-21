@@ -1,11 +1,6 @@
 
 
 
-NFT Template for Poly using OpenZepplin Contract 5.x - REC-721
-
-# Basic ERC-721 Smart Contract for Ploygon's mainnet or Polygon Amoy Testnet
-
-
 <img width="1280" height="640" alt="GITHUB  BULLMINT NFTS_POLYGON" src="https://github.com/user-attachments/assets/612320b3-4c89-4ccf-b7ee-88a1e2a4463b" />
 
 
