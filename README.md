@@ -20,6 +20,25 @@ NFT Template for Poly using OpenZepplin Contract 5.x - REC-721
 
 ---
 
+## Project Structure:
+
+BULLMINT-POLYGON-NFT/
+│
+├── contracts/
+│   └── BullBrewNFT.sol
+│
+├── scripts/
+│   └── deploy.js
+│
+├── .env
+├── .gitignore
+├── hardhat.config.js
+├── package.json
+└── README.md
+
+
+
+
 ## Contract
 
 Main contract file:
