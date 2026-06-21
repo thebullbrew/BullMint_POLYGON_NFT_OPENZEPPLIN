@@ -41,7 +41,6 @@ The contract allows:
 * Withdrawal of mint proceeds by the owner
 * Total minted supply tracking
 
-Requirements
 
 # Install the following: 
 
