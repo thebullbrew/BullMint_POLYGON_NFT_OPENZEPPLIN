@@ -1,0 +1,30 @@
+{
+  "name": "bullmint-polygon-nft",
+  "version": "1.0.0",
+  "description": "Bull Brew production-ready NFT collection for Polygon",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "clean": "hardhat clean",
+    "deploy:amoy": "hardhat run scripts/deploy.js --network amoy",
+    "deploy:polygon": "hardhat run scripts/deploy.js --network polygon"
+  },
+  "keywords": [
+    "nft",
+    "polygon",
+    "erc721",
+    "erc2981",
+    "bullbrew",
+    "web3"
+  ],
+  "author": "The Bull Brew",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.6"
+  }
+}
