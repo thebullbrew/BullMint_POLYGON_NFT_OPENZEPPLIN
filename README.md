@@ -76,15 +76,25 @@ Production-ready ERC721 NFT contract built with OpenZeppelin and Hardhat.
 # BREAKDOWN:
 
 Collection name: TheBullBrewCollection
+
 Symbol: BRW
+
 Network: Polygon (Amoy testnet + Polygon mainnet)
+
 Max supply: 1000
+
 Reserved for owner/team: 50
+
 Public supply: 950
+
 Wallet limit: 3
+
 Public mint: enabled by owner toggle
+
 Royalty support: included via ERC-2981
+
 Metadata: base URI model (better than passing a token URI on every mint)
+
 Type: membership/pass NFT collection
 
 # The Basics - Quick & Dirty:
