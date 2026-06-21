@@ -133,7 +133,7 @@ npm run deploy:polygon
 ```
 
 
-## Metadata fornmat
+## Metadata format
 
 
 ```bash
