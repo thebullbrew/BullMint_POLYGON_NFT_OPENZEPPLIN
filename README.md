@@ -20,24 +20,6 @@ NFT Template for Poly using OpenZepplin Contract 5.x - REC-721
 
 ---
 
-## Project Structure:
-
-BULLMINT-POLYGON-NFT/
-│
-├── contracts/
-│   └── BullBrewNFT.sol
-│
-├── scripts/
-│   └── deploy.js
-│
-├── .env
-├── .gitignore
-├── hardhat.config.js
-├── package.json
-└── README.md
-
-
-
 
 ## Contract
 
@@ -89,6 +71,20 @@ Production-ready ERC721 NFT contract built with OpenZeppelin and Hardhat.
 - OpenZeppelin security standards
 - Polygon Amoy support
 - Polygon Mainnet support
+
+
+## BREAKDOWBN:
+Collection name: TheBullBrewCollection
+Symbol: BRW
+Network: Polygon (Amoy testnet + Polygon mainnet)
+Max supply: 1000
+Reserved for owner/team: 50
+Public supply: 950
+Wallet limit: 3
+Public mint: enabled by owner toggle
+Royalty support: included via ERC-2981
+Metadata: base URI model (better than passing a token URI on every mint)
+Type: membership/pass NFT collection
 
 # The Basics - Quick & Dirty:
 ## Install
