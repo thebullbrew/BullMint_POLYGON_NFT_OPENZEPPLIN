@@ -141,9 +141,9 @@ The contract uses a base URI pattern:
 ipfs://YOUR_METADATA_CID/1.json
 ipfs://YOUR_METADATA_CID/2.json
 ipfs://YOUR_METADATA_CID/3.json
+```
 
-
-
+```bash
 That means if your base URI is: 
 ipfs://bafybeixxxxxxxxxxxxxxxxxxxxxxxxxxxxx/
 
@@ -159,20 +159,6 @@ ipfs://bafybeixxxxxxxxxxxxxxxxxxxxxxxxxxxxx/3.json
 - Update royalty receiver if you want royalties sent to a different wallet.
 - Public mint is disabled by default after deployment. Enable it by calling togglePublicMint(true) from the owner wallet.
 
-
-## Contract Settings (At this point you will see your own contract settings - hopefully that's what you did.)
-
-Collection Name:
-TheBullBrewCollection
-
-Symbol:
-BRW
-
-Maximum Supply:
-1000 NFTs
-
-Mint Price:
-0.01 POL
 
 ## Security:
 
