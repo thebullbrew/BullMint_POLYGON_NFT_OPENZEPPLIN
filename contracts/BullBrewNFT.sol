@@ -1,215 +1,229 @@
-
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract BullBrewNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
+contract BullBrewNFT is ERC721, ERC2981, Ownable, ReentrancyGuard {
+    using Strings for uint256;
 
+    uint256 public immutable maxSupply;
+    uint256 public immutable reservedSupply;
     uint256 public mintPrice;
-    uint256 public maxSupply;
     uint256 public totalMinted;
+    uint256 public maxMintPerWallet;
 
     bool public publicMintEnabled;
+
+    string private baseTokenURI;
+
+    mapping(address => uint256) public walletMints;
+
+    error PublicMintDisabled();
+    error MaxSupplyReached();
+    error ExceedsWalletLimit();
+    error InvalidMintQuantity();
+    error InsufficientPayment();
+    error ReserveExceeded();
+    error NoFunds();
+
+    event PublicMintToggled(bool enabled);
+    event MintPriceUpdated(uint256 newPrice);
+    event BaseURIUpdated(string newBaseURI);
+    event RoyaltyUpdated(address receiver, uint96 feeNumerator);
+    event MaxMintPerWalletUpdated(uint256 newLimit);
+    event OwnerMint(address indexed recipient, uint256 quantity);
+    event PublicMint(address indexed minter, uint256 quantity, uint256 totalPaid);
+    event Withdraw(address indexed owner, uint256 amount);
 
     constructor(
         string memory collectionName,
         string memory collectionSymbol,
         uint256 supplyLimit,
-        uint256 initialMintPrice
-    )
-        ERC721(collectionName, collectionSymbol)
-        Ownable(msg.sender)
-    {
+        uint256 reserveAmount,
+        uint256 initialMintPrice,
+        uint256 walletLimit,
+        string memory initialBaseURI,
+        address royaltyReceiver,
+        uint96 royaltyFeeNumerator
+    ) ERC721(collectionName, collectionSymbol) Ownable(msg.sender) {
+        require(supplyLimit > 0, "Supply must be > 0");
+        require(reserveAmount <= supplyLimit, "Reserve exceeds supply");
+        require(walletLimit > 0, "Wallet limit must be > 0");
+        require(royaltyReceiver != address(0), "Invalid royalty receiver");
+        require(bytes(initialBaseURI).length > 0, "Base URI required");
+
         maxSupply = supplyLimit;
+        reservedSupply = reserveAmount;
         mintPrice = initialMintPrice;
+        maxMintPerWallet = walletLimit;
+        baseTokenURI = initialBaseURI;
+
+        _setDefaultRoyalty(royaltyReceiver, royaltyFeeNumerator);
     }
 
-    modifier supplyAvailable() {
-        require(
-            totalMinted < maxSupply,
-            "Max supply reached"
-        );
-        _;
+    // =============================================================
+    //                           MINTING
+    // =============================================================
+
+    function publicMint(uint256 quantity) external payable nonReentrant {
+        if (!publicMintEnabled) revert PublicMintDisabled();
+        if (quantity == 0) revert InvalidMintQuantity();
+
+        uint256 publicSupply = maxSupply - reservedSupply;
+
+        if (totalMinted + quantity > publicSupply) {
+            revert MaxSupplyReached();
+        }
+
+        if (walletMints[msg.sender] + quantity > maxMintPerWallet) {
+            revert ExceedsWalletLimit();
+        }
+
+        uint256 requiredPayment = mintPrice * quantity;
+        if (msg.value < requiredPayment) revert InsufficientPayment();
+
+        walletMints[msg.sender] += quantity;
+
+        for (uint256 i = 0; i < quantity; i++) {
+            _mintNext(msg.sender);
+        }
+
+        emit PublicMint(msg.sender, quantity, msg.value);
     }
 
-    function togglePublicMint(bool enabled)
-        external
-        onlyOwner
-    {
-        publicMintEnabled = enabled;
+    function ownerMint(address recipient, uint256 quantity) external onlyOwner {
+        require(recipient != address(0), "Invalid recipient");
+        if (quantity == 0) revert InvalidMintQuantity();
+
+        if (totalMinted + quantity > maxSupply) {
+            revert MaxSupplyReached();
+        }
+
+        // Ensure owner mints do not exceed reserved allocation while public supply is intended for public buyers.
+        uint256 ownerMintedSoFar = totalMinted > (maxSupply - reservedSupply)
+            ? totalMinted - (maxSupply - reservedSupply)
+            : 0;
+
+        if (ownerMintedSoFar + quantity > reservedSupply) {
+            revert ReserveExceeded();
+        }
+
+        for (uint256 i = 0; i < quantity; i++) {
+            _mintNext(recipient);
+        }
+
+        emit OwnerMint(recipient, quantity);
     }
 
-    function updateMintPrice(uint256 newPrice)
-        external
-        onlyOwner
-    {
-        mintPrice = newPrice;
-    }
-
-    function publicMint(
-        string memory metadataURI
-    )
-        external
-        payable
-        supplyAvailable
-        nonReentrant
-    {
-        require(
-            publicMintEnabled,
-            "Public mint disabled"
-        );
-
-        require(
-            msg.value >= mintPrice,
-            "Insufficient payment"
-        );
-
+    function _mintNext(address recipient) internal {
         uint256 tokenId = totalMinted + 1;
-
-        _safeMint(msg.sender, tokenId);
-        _setTokenURI(tokenId, metadataURI);
-
-        totalMinted++;
-    }
-
-    function ownerMint(
-        address recipient,
-        string memory metadataURI
-    )
-        external
-        onlyOwner
-        supplyAvailable
-    {
-        uint256 tokenId = totalMinted + 1;
-
+        totalMinted += 1;
         _safeMint(recipient, tokenId);
-        _setTokenURI(tokenId, metadataURI);
-
-        totalMinted++;
     }
 
-    function withdraw()
-        external
-        onlyOwner
-        nonReentrant
-    {
+    // =============================================================
+    //                         OWNER CONTROLS
+    // =============================================================
+
+    function togglePublicMint(bool enabled) external onlyOwner {
+        publicMintEnabled = enabled;
+        emit PublicMintToggled(enabled);
+    }
+
+    function updateMintPrice(uint256 newPrice) external onlyOwner {
+        mintPrice = newPrice;
+        emit MintPriceUpdated(newPrice);
+    }
+
+    function updateMaxMintPerWallet(uint256 newLimit) external onlyOwner {
+        require(newLimit > 0, "Limit must be > 0");
+        maxMintPerWallet = newLimit;
+        emit MaxMintPerWalletUpdated(newLimit);
+    }
+
+    function setBaseURI(string calldata newBaseURI) external onlyOwner {
+        require(bytes(newBaseURI).length > 0, "Base URI required");
+        baseTokenURI = newBaseURI;
+        emit BaseURIUpdated(newBaseURI);
+    }
+
+    function setDefaultRoyalty(address receiver, uint96 feeNumerator) external onlyOwner {
+        require(receiver != address(0), "Invalid royalty receiver");
+        _setDefaultRoyalty(receiver, feeNumerator);
+        emit RoyaltyUpdated(receiver, feeNumerator);
+    }
+
+    function deleteDefaultRoyalty() external onlyOwner {
+        _deleteDefaultRoyalty();
+    }
+
+    // =============================================================
+    //                          WITHDRAW
+    // =============================================================
+
+    function withdraw() external onlyOwner nonReentrant {
         uint256 balance = address(this).balance;
+        if (balance == 0) revert NoFunds();
 
-        require(balance > 0, "No funds");
-
-        (bool success, ) = payable(owner()).call{
-            value: balance
-        }("");
-
+        (bool success, ) = payable(owner()).call{value: balance}("");
         require(success, "Withdraw failed");
+
+        emit Withdraw(owner(), balance);
     }
 
-    function remainingSupply()
-        external
-        view
-        returns (uint256)
-    {
+    // =============================================================
+    //                          METADATA
+    // =============================================================
+
+    function _baseURI() internal view override returns (string memory) {
+        return baseTokenURI;
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        _requireOwned(tokenId);
+
+        string memory baseURI = _baseURI();
+        return bytes(baseURI).length > 0
+            ? string(abi.encodePacked(baseURI, tokenId.toString(), ".json"))
+            : "";
+    }
+
+    // =============================================================
+    //                          VIEWS
+    // =============================================================
+
+    function remainingSupply() external view returns (uint256) {
         return maxSupply - totalMinted;
     }
-}
 
+    function remainingPublicSupply() external view returns (uint256) {
+        uint256 publicSupply = maxSupply - reservedSupply;
 
-
-// scripts/deploy.js | Configured for your collection:
-
-
-const hre = require("hardhat");
-
-async function main() {
-
-    const NFT = await hre.ethers.getContractFactory(
-        "BullBrewNFT"
-    );
-
-    const nft = await NFT.deploy(
-        "TheBullBrewCollection",
-        "BRW",
-        1000,
-        hre.ethers.parseEther("0.01")
-    );
-
-    await nft.waitForDeployment();
-
-    console.log(
-        "Contract deployed to:",
-        await nft.getAddress()
-    );
-}
-
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-});
-
-
-// hardhat.config.js
-
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
-
-module.exports = {
-
-    solidity: "0.8.24",
-
-    networks: {
-
-        amoy: {
-            url: process.env.POLYGON_AMOY_RPC_URL,
-            accounts: [process.env.PRIVATE_KEY]
-        },
-
-        polygon: {
-            url: process.env.POLYGON_MAINNET_RPC_URL,
-            accounts: [process.env.PRIVATE_KEY]
+        if (totalMinted >= publicSupply) {
+            return 0;
         }
+
+        return publicSupply - totalMinted;
     }
-};
 
+    function getBaseURI() external view returns (string memory) {
+        return baseTokenURI;
+    }
 
-// .env
+    // =============================================================
+    //                     INTERFACE SUPPORT
+    // =============================================================
 
-
-PRIVATE_KEY=
-
-POLYGON_AMOY_RPC_URL=
-POLYGON_MAINNET_RPC_URL=
-
-
-// .gitignore
-
-node_modules
-
-.env
-
-artifacts
-
-cache
-
-
-// package.json
-
-{
-  "name": "polygon-nft-template",
-  "version": "1.0.0",
-  "description": "Deploy NFT Collections to Polygon in Minutes",
-  "scripts": {
-    "compile": "hardhat compile",
-    "deploy:testnet": "hardhat run scripts/deploy.js --network amoy",
-    "deploy:mainnet": "hardhat run scripts/deploy.js --network polygon"
-  },
-  "dependencies": {
-    "@openzeppelin/contracts": "^5.0.2"
-  },
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "dotenv": "^16.4.5",
-    "hardhat": "^2.22.0"
-  }
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC2981)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
 }
